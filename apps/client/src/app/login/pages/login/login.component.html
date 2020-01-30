@@ -1,0 +1,30 @@
+<div>
+  <label>Email</label>
+  <input type="text" [(ngModel)]="createEmail" />
+
+  <label>Password</label>
+  <input type="password" [(ngModel)]="createPassword" />
+
+  <label>Display</label>
+  <input type="text" [(ngModel)]="createDisplay" />
+
+  <button (click)="createAccount()">Create</button>
+
+  <p>--------------------------------------------------------</p>
+
+  <label>Email</label>
+  <input type="text" [(ngModel)]="signInEmail" />
+
+  <label>Password</label>
+  <input type="password" [(ngModel)]="signInPassword" />
+
+  <button (click)="signIn()">Sign In</button>
+
+  <p>--------------------------------------------------------</p>
+
+  <button (click)="testRoute()">Test</button>
+
+  <p>--------------------------------------------------------</p>
+
+  <button (click)="logout()">Logout</button>
+</div>

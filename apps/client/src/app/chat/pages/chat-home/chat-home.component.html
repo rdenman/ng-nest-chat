@@ -1,0 +1,10 @@
+<div>
+  <div>Connected Users: {{ connectedUsersCount }}</div>
+  <label>Messages</label>
+  <ul>
+    <li *ngFor="let m of messages">{{ m }}</li>
+  </ul>
+
+  <label>Message</label>
+  <textarea [(ngModel)]="message" (keyup.enter)="addChat()"></textarea>
+</div>
