@@ -16,4 +16,8 @@ export class UserService {
   public async findOneByEmail(email: string): Promise<IUserModel | null> {
     return await this.User.findOne({ email });
   }
+
+  public async findOneByToken(email: string, token: string): Promise<IUserModel | null> {
+    return await this.User.findOne({ email, 'tokens.token': token, 'tokens.access': 'auth' });
+  }
 }

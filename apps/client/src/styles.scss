@@ -1,1 +1,36 @@
-/* You can add global styles to this file, and also import other style files */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+a,
+button {
+  @apply cursor-pointer;
+}
+
+a {
+  @apply text-blue-400;
+}
+
+a:hover {
+  @apply text-blue-600;
+}
+
+.button {
+  @apply bg-red-700 text-white font-bold py-2 px-4 rounded;
+}
+
+.button:hover {
+  @apply bg-red-900;
+}
+
+.form__label {
+  @apply block text-gray-700 text-sm font-bold mb-2;
+}
+
+.form__input {
+  @apply shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight;
+}
+
+.form__input:focus {
+  @apply outline-none shadow-outline;
+}

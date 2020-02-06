@@ -31,33 +31,29 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.server.emit(EventType.UpdateCount, this.connectedUsersCount);
   }
 
-  @SubscribeMessage(EventType.GetCount)
-  public async handleGetCount(@ConnectedSocket() client: Socket): Promise<WsResponse<number>> {
-    return { event: EventType.GetCount, data: this.connectedUsersCount };
-  }
-
   @UseGuards(WsJwtGuard)
   @SubscribeMessage(EventType.Message)
   public async handleMessage(
     @MessageBody() message: IMessage,
     @ConnectedSocket() client: Socket
-  ): Promise<WsResponse<string>> {
-    //.to(message.room)
-    client.broadcast.emit(EventType.Message, message.text);
-    return { event: EventType.Message, data: message.text };
+  ): Promise<WsResponse<IMessage>> {
+    client.broadcast.emit(EventType.Message, message);
+    return { event: EventType.Message, data: message };
   }
 
+  @UseGuards(WsJwtGuard)
   @SubscribeMessage(EventType.JoinRoom)
   public async handleJoinRoom(
     @MessageBody() message: IMessage,
     @ConnectedSocket() client: Socket
   ): Promise<WsResponse<string>> {
-    client.join(message.room);
+    // client.join(message.room);
     return { event: EventType.JoinRoom, data: 'OK' };
   }
 
+  @UseGuards(WsJwtGuard)
   @SubscribeMessage(EventType.LeaveRoom)
   public handleLeaveRoom(@MessageBody() message: IMessage, @ConnectedSocket() client: Socket): void {
-    client.leave(message.room);
+    // client.leave(message.room);
   }
 }

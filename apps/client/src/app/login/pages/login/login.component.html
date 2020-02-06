@@ -1,30 +1,30 @@
-<div>
-  <label>Email</label>
-  <input type="text" [(ngModel)]="createEmail" />
+<div class="flex flex-col h-full justify-center pb-24">
+  <h2 class="self-center mb-4 font-bold text-2xl">{{ isRegister ? 'Register' : 'Login' }}</h2>
 
-  <label>Password</label>
-  <input type="password" [(ngModel)]="createPassword" />
+  <form *ngIf="!switching" [formGroup]="form" (ngSubmit)="onSubmit()" class="self-center mb-4">
+    <div class="self-center p-4 mb-4 bg-blue-300 border-l-8 border-blue-400 rounded-lg" *ngIf="message">
+      {{ message }}
+    </div>
 
-  <label>Display</label>
-  <input type="text" [(ngModel)]="createDisplay" />
+    <div class="mb-4">
+      <label class="form__label" for="email">Email</label>
+      <input class="form__input" type="text" formControlName="email" />
+    </div>
 
-  <button (click)="createAccount()">Create</button>
+    <div class="mb-4">
+      <label class="form__label" for="email">Password</label>
+      <input class="form__input" type="password" formControlName="password" />
+    </div>
 
-  <p>--------------------------------------------------------</p>
+    <div *ngIf="isRegister" class="mb-4">
+      <label class="form__label" for="display">Display Name</label>
+      <input class="form__input" type="text" formControlName="display" />
+    </div>
 
-  <label>Email</label>
-  <input type="text" [(ngModel)]="signInEmail" />
+    <button class="button block mx-auto">{{ isRegister ? 'Register' : 'Login' }}</button>
+  </form>
 
-  <label>Password</label>
-  <input type="password" [(ngModel)]="signInPassword" />
-
-  <button (click)="signIn()">Sign In</button>
-
-  <p>--------------------------------------------------------</p>
-
-  <button (click)="testRoute()">Test</button>
-
-  <p>--------------------------------------------------------</p>
-
-  <button (click)="logout()">Logout</button>
+  <a (click)="switchMode()" class="self-center">{{
+    isRegister ? 'I already have an account.' : 'I need to create an account.'
+  }}</a>
 </div>

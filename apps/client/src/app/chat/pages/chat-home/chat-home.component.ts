@@ -1,45 +1,46 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { EventType, IEvent } from '@ng-nest-chat/api-interfaces';
-import { Subscription } from 'rxjs';
-import { ChatService } from '../../chat.service';
+import { IMessage, IUser } from '@ng-nest-chat/api-interfaces';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { UserService } from '../../../core/auth';
+import { ChatService } from '../../services';
 
 @Component({
-  selector: 'ng-nest-chat-chat-home',
+  selector: 'app-chat-home',
   templateUrl: './chat-home.component.html',
-  styleUrls: ['./chat-home.component.css'],
 })
 export class ChatHomeComponent implements OnInit, OnDestroy {
-  public messages: string[] = [];
-  public message: string = '';
+  public messages: IMessage[] = [];
   public connectedUsersCount: number;
 
-  private messageSubscription: Subscription;
+  private currentUser: IUser;
 
-  constructor(@Inject(ChatService) private readonly chatService: ChatService) {}
+  private ngUnsubscribe: Subject<void> = new Subject();
+
+  constructor(
+    @Inject(ChatService) private readonly chatService: ChatService,
+    @Inject(UserService) private readonly userService: UserService
+  ) {}
 
   public ngOnInit(): void {
-    this.messageSubscription = this.chatService.messages.subscribe((event: IEvent) => {
-      this.handleEvent(event);
+    this.currentUser = this.userService.currentUserValue;
+    this.chatService.connect();
+    this.chatService.messages.pipe(takeUntil(this.ngUnsubscribe)).subscribe((message: IMessage) => {
+      this.messages.push(message);
+    });
+    this.chatService.userCount.pipe(takeUntil(this.ngUnsubscribe)).subscribe((count: number) => {
+      this.connectedUsersCount = count;
     });
   }
 
   public ngOnDestroy(): void {
-    this.messageSubscription.unsubscribe();
+    this.chatService.disconnect();
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
-  public addChat() {
-    this.chatService.sendChat(this.message, 'ass');
-    this.message = '';
-  }
-
-  private handleEvent(event: IEvent): void {
-    switch (event.event) {
-      case EventType.Message:
-        this.messages.push(event.data);
-        break;
-      case EventType.UpdateCount:
-        this.connectedUsersCount = event.data;
-        break;
-    }
+  public addChat(message: string): void {
+    // TODO update room
+    this.chatService.sendChat({ text: message.trim(), to: 'Whatever room', from: this.currentUser });
   }
 }

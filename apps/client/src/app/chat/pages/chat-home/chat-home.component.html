@@ -1,10 +1,11 @@
-<div>
+<div class="h-full flex flex-col">
   <div>Connected Users: {{ connectedUsersCount }}</div>
-  <label>Messages</label>
-  <ul>
-    <li *ngFor="let m of messages">{{ m }}</li>
-  </ul>
 
-  <label>Message</label>
-  <textarea [(ngModel)]="message" (keyup.enter)="addChat()"></textarea>
+  <div class="flex-auto overflow-y-auto">
+    <app-chat-message-list [messages]="messages"></app-chat-message-list>
+  </div>
+
+  <div class="flex-initial">
+    <app-chat-box (send)="addChat($event)"></app-chat-box>
+  </div>
 </div>
