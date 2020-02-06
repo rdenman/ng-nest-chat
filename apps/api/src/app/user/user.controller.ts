@@ -1,5 +1,4 @@
-import { Body, Controller, Get, Inject, Post, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { Body, Controller, Inject, Post } from '@nestjs/common';
 import { CreateUserDto, IUser } from '@ng-nest-chat/api-interfaces';
 import { IUserDocument } from './user.schema';
 import { UserService } from './user.service';
@@ -11,13 +10,7 @@ export class UserController {
   @Post()
   public async create(@Body() dto: CreateUserDto): Promise<IUser> {
     const created: IUserDocument = await this.userService.create(dto);
-    const { email, display }: IUser = created;
+    const { email, display }: IUserDocument = created;
     return { email, display };
-  }
-
-  @Get('test')
-  @UseGuards(AuthGuard())
-  public testAuthRoute(): any {
-    return { message: 'wowo so cool!' };
   }
 }

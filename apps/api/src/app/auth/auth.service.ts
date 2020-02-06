@@ -24,11 +24,14 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    return this.createJwtPayload(user);
+    const payload: JwtResponse = this.createJwtPayload(user);
+    return user.addToken(payload.token).then(_ => {
+      return payload;
+    });
   }
 
-  public async validateUserByToken(payload: JwtPayload): Promise<JwtResponse> {
-    const user: IUser = await this.userService.findOneByEmail(payload.email);
+  public async validateUserByToken(payload: JwtPayload, token: string): Promise<JwtResponse> {
+    const user: IUser = await this.userService.findOneByToken(payload.email, token);
     if (user) {
       return this.createJwtPayload(user);
     } else {
@@ -39,10 +42,11 @@ export class AuthService {
   private createJwtPayload(user: IUser): JwtResponse {
     const data: JwtPayload = {
       email: user.email,
+      display: user.display,
     };
     const jwt: string = this.jwtService.sign(data);
     return {
-      expiresIn: Number(this.configService.get<number>('JWT_EXPIRES_IN', 3600)),
+      expiresIn: Number(this.configService.get<number>('JWT_EXPIRES_IN')),
       token: jwt,
     };
   }

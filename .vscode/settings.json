@@ -1,5 +1,12 @@
 {
+  "editor.tabSize": 2,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
     "source.organizeImports": true
-  }
+  },
+  "editor.formatOnSave": true,
+  "html.format.enable": true,
+  "css.validate": false,
+  "less.validate": false,
+  "scss.validate": false
 }

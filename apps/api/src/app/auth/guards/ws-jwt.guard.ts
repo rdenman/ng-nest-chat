@@ -19,11 +19,10 @@ export class WsJwtGuard implements CanActivate {
     try {
       // TODO how are exceptions thrown here?
       const payload: JwtPayload = this.jwtService.verify(token);
-      const response: JwtResponse = await this.authService.validateUserByToken(payload);
-      context.switchToWs().getData().user = response;
+      const response: JwtResponse = await this.authService.validateUserByToken(payload, token);
       return Boolean(response);
     } catch (e) {
-      throw e;
+      return false;
     }
   }
 }

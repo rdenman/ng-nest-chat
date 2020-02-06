@@ -1,7 +1,10 @@
+import { IToken } from './auth.interface';
+
 export interface IUser {
   email?: string;
   display?: string;
   password?: string;
+  tokens?: IToken[];
 }
 
 export interface CreateUserDto {

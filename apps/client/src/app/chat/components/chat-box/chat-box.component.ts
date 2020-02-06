@@ -1,19 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
-  selector: 'ng-nest-chat-chat-box',
+  selector: 'app-chat-box',
   templateUrl: './chat-box.component.html',
-  styleUrls: ['./chat-box.component.css'],
 })
-export class ChatBoxComponent implements OnInit {
-  public messages: string[];
+export class ChatBoxComponent {
+  @Output()
+  public send: EventEmitter<string> = new EventEmitter<string>();
+
   public message: string;
 
-  constructor() {}
-
-  ngOnInit() {}
-
-  public addChat() {
-    console.log('adding...');
+  public onSend() {
+    this.send.emit(this.message);
+    this.message = '';
   }
 }
