@@ -15,14 +15,24 @@ export class UserService {
   }
 
   public async findOneByEmail(email: string): Promise<IUserModel | null> {
-    const user: IUserModel = await this.User.findOne({ email });
-    user.userId = user._id;
-    return user;
+    return await this.findOneBy(email);
   }
 
   public async findOneByToken(email: string, token: string): Promise<IUserModel | null> {
-    const user: IUserModel = await this.User.findOne({ email, 'tokens.token': token, 'tokens.access': 'auth' });
-    user.userId = user._id;
-    return user;
+    return await this.findOneBy(email, token);
+  }
+
+  private async findOneBy(email: string, token?: string): Promise<IUserModel | null> {
+    const conditions: { email: string; 'tokens.token'?: string; 'tokens.access'?: 'auth' } = { email };
+    if (token) {
+      conditions['tokens.token'] = token;
+      conditions['tokens.access'] = 'auth';
+    }
+    const user: IUserModel = await this.User.findOne(conditions);
+    if (user) {
+      user.userId = user._id;
+      return user;
+    }
+    return null;
   }
 }

@@ -8,6 +8,6 @@ export interface IRoom {
 }
 
 export interface CreateRoomDto {
-  createdBy: IUser;
   name: string;
+  createdBy: string;
 }

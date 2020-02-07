@@ -1,14 +1,14 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IRoom } from '@ng-nest-chat/api-interfaces';
+import { UserService } from '../../../core/auth';
 import { RoomService } from '../../services/room.service';
 
 @Component({
-  selector: 'app-room-list',
-  templateUrl: './room-list.component.html',
-  styles: [],
+  selector: 'app-chat-room-list',
+  templateUrl: './chat-room-list.component.html',
 })
-export class RoomListComponent implements OnInit {
+export class ChatRoomListComponent implements OnInit {
   public form: FormGroup;
   public loading: boolean = false;
   public rooms: IRoom[] = [];
@@ -16,7 +16,8 @@ export class RoomListComponent implements OnInit {
 
   constructor(
     @Inject(FormBuilder) private readonly formBuilder: FormBuilder,
-    @Inject(RoomService) private readonly roomService: RoomService
+    @Inject(RoomService) private readonly roomService: RoomService,
+    @Inject(UserService) private readonly userService: UserService
   ) {}
 
   public ngOnInit(): void {
@@ -25,18 +26,30 @@ export class RoomListComponent implements OnInit {
     });
 
     this.roomService.findAll().subscribe((rooms: IRoom[]) => {
+      console.log(rooms);
       this.rooms = rooms;
     });
   }
 
   public onSubmit(): void {
+    console.log('submit...');
     if (this.form.invalid) {
       this.message = 'Invalid room name.';
       return;
     }
+    console.log('valid');
 
     this.loading = true;
     this.message = '';
-    // this.roomService.create({  })
+    // TODO should get user on server side rather than sending as part of this
+    this.roomService
+      .create({
+        name: this.form.controls.name.value,
+        createdBy: this.userService.currentUserValue.userId,
+      })
+      .subscribe((room: IRoom) => {
+        console.log(room);
+        this.rooms.push(room);
+      });
   }
 }

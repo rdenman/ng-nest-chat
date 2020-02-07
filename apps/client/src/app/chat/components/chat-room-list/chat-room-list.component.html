@@ -1,0 +1,18 @@
+<div class="h-full overflow-auto flex flex-col">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="self-center mb-4">
+    <div class="self-center p-4 mb-4 bg-blue-300 border-l-8 border-blue-400 rounded-lg" *ngIf="message">
+      {{ message }}
+    </div>
+
+    <div class="mb-4">
+      <label class="form__label" for="name">Name</label>
+      <input class="form__input" type="text" formControlName="name" />
+    </div>
+
+    <button class="button" type="submit">Create Room</button>
+  </form>
+
+  <div *ngFor="let room of rooms">
+    {{ room.name }}
+  </div>
+</div>

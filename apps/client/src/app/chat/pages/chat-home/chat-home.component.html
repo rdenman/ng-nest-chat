@@ -1,11 +1,15 @@
-<div class="h-full flex flex-col">
-  <div>Connected Users: {{ connectedUsersCount }}</div>
+<div class="h-full flex">
+  <app-chat-room-list></app-chat-room-list>
 
-  <div class="flex-auto overflow-y-auto">
-    <app-chat-message-list [messages]="messages"></app-chat-message-list>
-  </div>
+  <div class="h-full flex flex-col">
+    <div>Connected Users: {{ connectedUsersCount }}</div>
 
-  <div class="flex-initial">
-    <app-chat-box (send)="addChat($event)"></app-chat-box>
+    <div class="flex-auto overflow-y-auto">
+      <app-chat-message-list [messages]="messages"></app-chat-message-list>
+    </div>
+
+    <div class="flex-initial">
+      <app-chat-box (send)="addChat($event)"></app-chat-box>
+    </div>
   </div>
 </div>

@@ -21,7 +21,7 @@
       <input class="form__input" type="text" formControlName="display" />
     </div>
 
-    <button class="button block mx-auto">{{ isRegister ? 'Register' : 'Login' }}</button>
+    <button class="button block mx-auto" type="submit">{{ isRegister ? 'Register' : 'Login' }}</button>
   </form>
 
   <a (click)="switchMode()" class="self-center">{{
