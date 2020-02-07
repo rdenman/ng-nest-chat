@@ -22,8 +22,8 @@ export class TokenService {
         .map((c: string) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
         .join('')
     );
-    const { email, display }: JwtPayload = JSON.parse(jsonPayload);
-    return { email, display };
+    const { email, display, userId }: JwtPayload = JSON.parse(jsonPayload);
+    return { email, display, userId };
   }
 
   public set jwt(jwt: JwtResponse) {

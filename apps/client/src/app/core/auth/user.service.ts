@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { IUser } from '@ng-nest-chat/api-interfaces';
+import { CreateUserDto, IUser } from '@ng-nest-chat/api-interfaces';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, take } from 'rxjs/operators';
 import { ApiService, TokenService } from '../services';
@@ -13,6 +13,7 @@ export class UserService {
     @Inject(TokenService) private readonly tokenService: TokenService
   ) {
     const user: IUser = TokenService.toUser(this.tokenService.token);
+    console.log(user);
     this.currentUserSubject = new BehaviorSubject<IUser>(user);
   }
 
@@ -29,7 +30,7 @@ export class UserService {
   }
 
   public register(email: string, password: string, display: string): Observable<IUser> {
-    return this.api.post<IUser, IUser>('/user', { email, password, display }).pipe(
+    return this.api.post<CreateUserDto, IUser>('/user', { email, password, display }).pipe(
       take(1),
       catchError(_ => of(null))
     );

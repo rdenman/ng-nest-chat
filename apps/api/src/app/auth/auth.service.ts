@@ -43,7 +43,9 @@ export class AuthService {
     const data: JwtPayload = {
       email: user.email,
       display: user.display,
+      userId: user.userId,
     };
+    console.log(data);
     const jwt: string = this.jwtService.sign(data);
     return {
       expiresIn: Number(this.configService.get<number>('JWT_EXPIRES_IN')),
