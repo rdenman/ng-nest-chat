@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { ClassProvider, FactoryProvider, InjectionToken, PLATFORM_ID, Provider } from '@angular/core';
+import { ClassProvider, FactoryProvider, Injectable, InjectionToken, PLATFORM_ID, Provider } from '@angular/core';
 
 export const STORAGE_JWT = 'jwt';
 
@@ -11,6 +11,7 @@ export abstract class LocalStorageRef {
   }
 }
 
+@Injectable()
 export class BrowserLocalStorageRef extends LocalStorageRef {
   constructor() {
     super();
