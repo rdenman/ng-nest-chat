@@ -16,5 +16,20 @@ export const RoomSchema: Schema<IRoomModel> = new Schema<IRoomModel>({
     type: Types.ObjectId,
     required: true,
   },
-  messages: [Types.ObjectId],
+  messages: [
+    {
+      from: {
+        type: Types.ObjectId,
+        required: true,
+      },
+      to: {
+        type: String,
+        required: true,
+      },
+      text: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
 });
