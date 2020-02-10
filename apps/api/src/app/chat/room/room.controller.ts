@@ -17,8 +17,12 @@ export class RoomController {
 
   @Get()
   public async findAll(): Promise<Room[]> {
-    const rooms: Room[] = await this.roomService.findAll();
-    console.log(rooms);
-    return rooms;
+    const rooms: IRoomDocument[] = await this.roomService.findAll();
+    return rooms.map((room: IRoomDocument) => ({
+      _id: room._id,
+      name: room.name,
+      owner: room.owner,
+      messages: room.messages,
+    }));
   }
 }

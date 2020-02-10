@@ -1,14 +1,5 @@
 import { Inject, UseGuards } from '@nestjs/common';
-import {
-  ConnectedSocket,
-  MessageBody,
-  OnGatewayConnection,
-  OnGatewayDisconnect,
-  SubscribeMessage,
-  WebSocketGateway,
-  WebSocketServer,
-  WsResponse,
-} from '@nestjs/websockets';
+import { ConnectedSocket, MessageBody, OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer, WsResponse } from '@nestjs/websockets';
 import { EventType, Message, Room } from '@ng-nest-chat/api-interfaces';
 import { Server, Socket } from 'socket.io';
 import { WsJwtGuard } from '../auth/guards/ws-jwt.guard';
@@ -52,7 +43,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @ConnectedSocket() client: Socket
   ): Promise<WsResponse<string>> {
     client.join(room.name);
-    return { event: EventType.JoinRoom, data: 'OK' };
+    return { event: EventType.JoinRoom, data: room.name };
   }
 
   @UseGuards(WsJwtGuard)

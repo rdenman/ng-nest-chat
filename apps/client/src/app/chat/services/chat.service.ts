@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { EventType, IMessage, Message } from '@ng-nest-chat/api-interfaces';
+import { EventType, IMessage, Message, Room } from '@ng-nest-chat/api-interfaces';
 import { Observable } from 'rxjs';
 import { WebsocketService } from '../../core/services';
 
@@ -31,5 +31,13 @@ export class ChatService {
 
   public sendChat(message: IMessage): void {
     this.websocketService.emitEvent<IMessage>(EventType.Message, message);
+  }
+
+  public joinRoom(room: Room): void {
+    this.websocketService.emitEvent<Room>(EventType.JoinRoom, room);
+  }
+
+  public leaveRoom(room: Room): void {
+    this.websocketService.emitEvent<Room>(EventType.LeaveRoom, room);
   }
 }

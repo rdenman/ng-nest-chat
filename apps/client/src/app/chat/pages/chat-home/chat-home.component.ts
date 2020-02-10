@@ -47,7 +47,10 @@ export class ChatHomeComponent implements OnInit, OnDestroy {
   }
 
   public switchRooms(room: Room): void {
+    this.chatService.leaveRoom(this.currentRoom);
     this.currentRoom = room;
+    console.log(this.currentRoom);
     this.messages = this.currentRoom.messages || [];
+    this.chatService.joinRoom(this.currentRoom);
   }
 }

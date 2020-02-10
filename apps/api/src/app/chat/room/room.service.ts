@@ -16,10 +16,12 @@ export class RoomService {
 
   // TODO add auth, allow query param to load owners or not
   public async findAll(): Promise<IRoomModel[]> {
-    const rooms: IRoomModel[] = await this.Room.find();
-    rooms.forEach((room: IRoomModel) => {
-      room.populate('owner');
-    });
+    const rooms: IRoomModel[] = await this.Room.find()
+      .populate('owner')
+      .populate('messages.from');
+    // rooms.forEach((room: IRoomModel) => {
+    //   room.populate('owner');
+    // });
     return rooms;
   }
 
