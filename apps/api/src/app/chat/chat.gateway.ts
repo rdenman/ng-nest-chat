@@ -9,7 +9,7 @@ import {
   WebSocketServer,
   WsResponse,
 } from '@nestjs/websockets';
-import { EventType, IMessage } from '@ng-nest-chat/api-interfaces';
+import { EventType, IMessage, IRoom } from '@ng-nest-chat/api-interfaces';
 import { Server, Socket } from 'socket.io';
 import { WsJwtGuard } from '../auth/guards/ws-jwt.guard';
 
@@ -37,23 +37,23 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() message: IMessage,
     @ConnectedSocket() client: Socket
   ): Promise<WsResponse<IMessage>> {
-    client.broadcast.emit(EventType.Message, message);
+    client.to(message.to).broadcast.emit(EventType.Message, message);
     return { event: EventType.Message, data: message };
   }
 
   @UseGuards(WsJwtGuard)
   @SubscribeMessage(EventType.JoinRoom)
   public async handleJoinRoom(
-    @MessageBody() message: IMessage,
+    @MessageBody() room: IRoom,
     @ConnectedSocket() client: Socket
   ): Promise<WsResponse<string>> {
-    // client.join(message.room);
+    client.join(room.name);
     return { event: EventType.JoinRoom, data: 'OK' };
   }
 
   @UseGuards(WsJwtGuard)
   @SubscribeMessage(EventType.LeaveRoom)
-  public handleLeaveRoom(@MessageBody() message: IMessage, @ConnectedSocket() client: Socket): void {
-    // client.leave(message.room);
+  public handleLeaveRoom(@MessageBody() room: IRoom, @ConnectedSocket() client: Socket): void {
+    client.leave(room.name);
   }
 }

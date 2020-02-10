@@ -1,7 +1,8 @@
 <div class="h-full flex">
-  <app-chat-room-list></app-chat-room-list>
+  <app-chat-room-list (selectRoom)="switchRooms($event)"></app-chat-room-list>
 
-  <div class="h-full flex flex-col">
+  <div *ngIf="currentRoom" class="h-full flex flex-col">
+    <h2 class="text-xl font-bold">{{ currentRoom.name }}</h2>
     <div>Connected Users: {{ connectedUsersCount }}</div>
 
     <div class="flex-auto overflow-y-auto">

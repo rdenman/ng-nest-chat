@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IRoom } from '@ng-nest-chat/api-interfaces';
 import { UserService } from '../../../core/auth';
@@ -9,6 +9,9 @@ import { RoomService } from '../../services/room.service';
   templateUrl: './chat-room-list.component.html',
 })
 export class ChatRoomListComponent implements OnInit {
+  @Output()
+  public selectRoom: EventEmitter<IRoom> = new EventEmitter<IRoom>();
+
   public form: FormGroup;
   public loading: boolean = false;
   public rooms: IRoom[] = [];
@@ -51,5 +54,9 @@ export class ChatRoomListComponent implements OnInit {
         console.log(room);
         this.rooms.push(room);
       });
+  }
+
+  public onRoomSelect(room :IRoom): void {
+    this.selectRoom.emit(room);
   }
 }

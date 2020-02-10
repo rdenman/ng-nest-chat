@@ -1,5 +1,5 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { IMessage, IUser } from '@ng-nest-chat/api-interfaces';
+import { IMessage, IRoom, IUser } from '@ng-nest-chat/api-interfaces';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { UserService } from '../../../core/auth';
@@ -10,6 +10,8 @@ import { ChatService } from '../../services';
   templateUrl: './chat-home.component.html',
 })
 export class ChatHomeComponent implements OnInit, OnDestroy {
+  public currentRoom: IRoom;
+
   public messages: IMessage[] = [];
   public connectedUsersCount: number;
 
@@ -42,5 +44,10 @@ export class ChatHomeComponent implements OnInit, OnDestroy {
   public addChat(message: string): void {
     // TODO update room
     this.chatService.sendChat({ text: message.trim(), to: 'Whatever room', from: this.currentUser });
+  }
+
+  public switchRooms(room: IRoom): void {
+    this.currentRoom = room;
+    this.messages = this.currentRoom.messages || [];
   }
 }

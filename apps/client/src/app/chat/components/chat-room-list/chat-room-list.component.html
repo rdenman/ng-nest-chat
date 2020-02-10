@@ -13,6 +13,6 @@
   </form>
 
   <div *ngFor="let room of rooms">
-    {{ room.name }}
+    <a (click)="onRoomSelect(room)">{{ room.name }}</a>
   </div>
 </div>
