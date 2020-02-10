@@ -29,7 +29,7 @@ export const localStorageFactory: (
   if (isPlatformBrowser(platformID)) {
     return browserLocalStorageRef.nativeLocalStorage;
   }
-  return new Object();
+  return {};
 };
 
 export const browserLocalStorageProvider: ClassProvider = {

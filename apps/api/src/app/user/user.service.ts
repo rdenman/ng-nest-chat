@@ -10,8 +10,11 @@ export class UserService {
 
   public async create(dto: CreateUserDto): Promise<IUserModel> {
     const created: IUserModel = new this.User(dto);
-    created.userId = created._id;
     return await created.save();
+  }
+
+  public async findOne(_id: string): Promise<IUserModel | null> {
+    return await this.User.findById(_id);
   }
 
   public async findOneByEmail(email: string): Promise<IUserModel | null> {
@@ -29,10 +32,6 @@ export class UserService {
       conditions['tokens.access'] = 'auth';
     }
     const user: IUserModel = await this.User.findOne(conditions);
-    if (user) {
-      user.userId = user._id;
-      return user;
-    }
-    return null;
+    return user || null;
   }
 }

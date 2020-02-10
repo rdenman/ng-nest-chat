@@ -1,4 +1,4 @@
-import { UseGuards } from '@nestjs/common';
+import { Inject, UseGuards } from '@nestjs/common';
 import {
   ConnectedSocket,
   MessageBody,
@@ -9,9 +9,10 @@ import {
   WebSocketServer,
   WsResponse,
 } from '@nestjs/websockets';
-import { EventType, IMessage, IRoom } from '@ng-nest-chat/api-interfaces';
+import { EventType, Message, Room } from '@ng-nest-chat/api-interfaces';
 import { Server, Socket } from 'socket.io';
 import { WsJwtGuard } from '../auth/guards/ws-jwt.guard';
+import { RoomService } from './room/room.service';
 
 @WebSocketGateway()
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -19,6 +20,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private server: Server;
 
   private connectedUsersCount: number = 0;
+
+  constructor(@Inject(RoomService) private readonly roomService: RoomService) {}
 
   @UseGuards(WsJwtGuard)
   public handleConnection(): void {
@@ -34,17 +37,18 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @UseGuards(WsJwtGuard)
   @SubscribeMessage(EventType.Message)
   public async handleMessage(
-    @MessageBody() message: IMessage,
+    @MessageBody() message: Message,
     @ConnectedSocket() client: Socket
-  ): Promise<WsResponse<IMessage>> {
-    client.to(message.to).broadcast.emit(EventType.Message, message);
+  ): Promise<WsResponse<Message>> {
+    this.roomService.addMessage(message);
+    client.to(message.room.name).broadcast.emit(EventType.Message, message);
     return { event: EventType.Message, data: message };
   }
 
   @UseGuards(WsJwtGuard)
   @SubscribeMessage(EventType.JoinRoom)
   public async handleJoinRoom(
-    @MessageBody() room: IRoom,
+    @MessageBody() room: Room,
     @ConnectedSocket() client: Socket
   ): Promise<WsResponse<string>> {
     client.join(room.name);
@@ -53,7 +57,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @UseGuards(WsJwtGuard)
   @SubscribeMessage(EventType.LeaveRoom)
-  public handleLeaveRoom(@MessageBody() room: IRoom, @ConnectedSocket() client: Socket): void {
+  public handleLeaveRoom(@MessageBody() room: Room, @ConnectedSocket() client: Socket): void {
     client.leave(room.name);
   }
 }

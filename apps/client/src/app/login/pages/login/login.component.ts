@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { IUser } from '@ng-nest-chat/api-interfaces';
+import { User } from '@ng-nest-chat/api-interfaces';
 import { AuthService, UserService } from '../../../core/auth';
 
 @Component({
@@ -75,7 +75,7 @@ export class LoginComponent implements OnInit {
   private register(): void {
     this.userService
       .register(this.form.controls.email.value, this.form.controls.password.value, this.form.controls.display.value)
-      .subscribe((user: IUser) => {
+      .subscribe((user: User) => {
         if (user) {
           this.switchMode();
           this.message = 'Registration successful.';

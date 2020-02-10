@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { IMessage } from '@ng-nest-chat/api-interfaces';
+import { Message } from '@ng-nest-chat/api-interfaces';
 
 @Component({
   selector: 'app-chat-message-list',
@@ -7,5 +7,5 @@ import { IMessage } from '@ng-nest-chat/api-interfaces';
 })
 export class ChatMessageListComponent {
   @Input()
-  public messages: IMessage[];
+  public messages: Message[];
 }

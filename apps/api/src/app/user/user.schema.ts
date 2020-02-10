@@ -23,6 +23,14 @@ export const UserSchema: Schema<IUserModel> = new Schema<IUserModel>({
     type: String,
     required: true,
   },
+  created: {
+    type: Date,
+    default: Date.now,
+  },
+  updated: {
+    type: Date,
+    default: Date.now,
+  },
   tokens: [
     {
       access: {
@@ -39,6 +47,7 @@ export const UserSchema: Schema<IUserModel> = new Schema<IUserModel>({
 
 UserSchema.pre<IUserDocument>('save', function(next: HookNextFunction): void {
   const user: IUserDocument = this;
+  user.updated = new Date();
   if (!user.isModified('password')) {
     return next();
   }

@@ -1,10 +1,9 @@
 import { IRoom } from '@ng-nest-chat/api-interfaces';
-import { Document, Schema, Types } from 'mongoose';
+import { Document, Schema } from 'mongoose';
+import { MessageSchema } from '../message/message.schema';
 
 export interface IRoomDocument extends Document, IRoom {}
-export interface IRoomModel extends IRoomDocument {
-  loadMessages: () => Promise<void>;
-}
+export interface IRoomModel extends IRoomDocument {}
 
 export const RoomSchema: Schema<IRoomModel> = new Schema<IRoomModel>({
   name: {
@@ -12,24 +11,14 @@ export const RoomSchema: Schema<IRoomModel> = new Schema<IRoomModel>({
     unique: true,
     required: true,
   },
-  createdBy: {
-    type: Types.ObjectId,
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
     required: true,
   },
-  messages: [
-    {
-      from: {
-        type: Types.ObjectId,
-        required: true,
-      },
-      to: {
-        type: String,
-        required: true,
-      },
-      text: {
-        type: String,
-        required: true,
-      },
-    },
-  ],
+  messages: [MessageSchema],
+  created: {
+    type: Date,
+    default: Date.now,
+  },
 });

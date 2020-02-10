@@ -1,5 +1,5 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { IMessage, IRoom, IUser } from '@ng-nest-chat/api-interfaces';
+import { Message, Room, User } from '@ng-nest-chat/api-interfaces';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { UserService } from '../../../core/auth';
@@ -10,12 +10,12 @@ import { ChatService } from '../../services';
   templateUrl: './chat-home.component.html',
 })
 export class ChatHomeComponent implements OnInit, OnDestroy {
-  public currentRoom: IRoom;
+  public currentRoom: Room;
 
-  public messages: IMessage[] = [];
+  public messages: Message[] = [];
   public connectedUsersCount: number;
 
-  private currentUser: IUser;
+  private currentUser: User;
 
   private ngUnsubscribe: Subject<void> = new Subject();
 
@@ -27,7 +27,7 @@ export class ChatHomeComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.currentUser = this.userService.currentUserValue;
     this.chatService.connect();
-    this.chatService.messages.pipe(takeUntil(this.ngUnsubscribe)).subscribe((message: IMessage) => {
+    this.chatService.messages.pipe(takeUntil(this.ngUnsubscribe)).subscribe((message: Message) => {
       this.messages.push(message);
     });
     this.chatService.userCount.pipe(takeUntil(this.ngUnsubscribe)).subscribe((count: number) => {
@@ -43,10 +43,10 @@ export class ChatHomeComponent implements OnInit, OnDestroy {
 
   public addChat(message: string): void {
     // TODO update room
-    this.chatService.sendChat({ text: message.trim(), to: 'Whatever room', from: this.currentUser });
+    this.chatService.sendChat({ text: message.trim(), from: this.currentUser, room: this.currentRoom });
   }
 
-  public switchRooms(room: IRoom): void {
+  public switchRooms(room: Room): void {
     this.currentRoom = room;
     this.messages = this.currentRoom.messages || [];
   }

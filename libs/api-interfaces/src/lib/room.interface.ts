@@ -1,13 +1,17 @@
-import { IMessage } from './message.interface';
-import { IUser } from './user.interface';
+import { Message } from './message.interface';
+import { User } from './user.interface';
 
 export interface IRoom {
-  createdBy?: IUser;
-  messages?: IMessage[];
   name?: string;
+  owner?: User;
+  messages?: Message[];
+}
+
+export interface Room extends IRoom {
+  _id: string;
 }
 
 export interface CreateRoomDto {
   name: string;
-  createdBy: string;
+  owner: User;
 }

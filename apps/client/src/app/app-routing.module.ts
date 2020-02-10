@@ -11,11 +11,17 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    loadChildren: () => import('./login/login.module').then(m => m.LoginModule),
+    loadChildren: () =>
+      import('./login/login.module')
+        .then(m => m.LoginModule)
+        .catch(e => console.error('Unable to load Login module:', e)),
   },
   {
     path: 'chat',
-    loadChildren: () => import('./chat/chat.module').then(m => m.ChatModule),
+    loadChildren: () =>
+      import('./chat/chat.module')
+        .then(m => m.ChatModule)
+        .catch(e => console.error('Unable to load Chat module:', e)),
     canActivate: [AuthGuard],
   },
 ];

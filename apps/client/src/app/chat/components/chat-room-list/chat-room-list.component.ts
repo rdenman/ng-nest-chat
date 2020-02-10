@@ -1,6 +1,6 @@
-import { Component, Inject, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IRoom } from '@ng-nest-chat/api-interfaces';
+import { Room } from '@ng-nest-chat/api-interfaces';
 import { UserService } from '../../../core/auth';
 import { RoomService } from '../../services/room.service';
 
@@ -10,11 +10,11 @@ import { RoomService } from '../../services/room.service';
 })
 export class ChatRoomListComponent implements OnInit {
   @Output()
-  public selectRoom: EventEmitter<IRoom> = new EventEmitter<IRoom>();
+  public selectRoom: EventEmitter<Room> = new EventEmitter<Room>();
 
   public form: FormGroup;
   public loading: boolean = false;
-  public rooms: IRoom[] = [];
+  public rooms: Room[] = [];
   public message: string = '';
 
   constructor(
@@ -28,7 +28,7 @@ export class ChatRoomListComponent implements OnInit {
       name: ['', Validators.required],
     });
 
-    this.roomService.findAll().subscribe((rooms: IRoom[]) => {
+    this.roomService.findAll().subscribe((rooms: Room[]) => {
       console.log(rooms);
       this.rooms = rooms;
     });
@@ -48,15 +48,15 @@ export class ChatRoomListComponent implements OnInit {
     this.roomService
       .create({
         name: this.form.controls.name.value,
-        createdBy: this.userService.currentUserValue.userId,
+        owner: this.userService.currentUserValue,
       })
-      .subscribe((room: IRoom) => {
+      .subscribe((room: Room) => {
         console.log(room);
         this.rooms.push(room);
       });
   }
 
-  public onRoomSelect(room :IRoom): void {
+  public onRoomSelect(room: Room): void {
     this.selectRoom.emit(room);
   }
 }

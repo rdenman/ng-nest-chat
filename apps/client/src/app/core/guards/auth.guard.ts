@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { IUser } from '@ng-nest-chat/api-interfaces';
+import { User } from '@ng-nest-chat/api-interfaces';
 import { Observable } from 'rxjs';
 import { UserService } from '../auth';
 
@@ -15,7 +15,7 @@ export class AuthGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    const currentUser: IUser = this.userService.currentUserValue;
+    const currentUser: User = this.userService.currentUserValue;
     if (currentUser) {
       return true;
     }

@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { IUser, JwtPayload, JwtResponse } from '@ng-nest-chat/api-interfaces';
+import { JwtPayload, JwtResponse, User } from '@ng-nest-chat/api-interfaces';
 import { LOCAL_STORAGE, STORAGE_JWT } from '../injectors';
 
 @Injectable()
@@ -9,7 +9,7 @@ export class TokenService {
 
   constructor(@Inject(LOCAL_STORAGE) private readonly localStorage: Storage) {}
 
-  public static toUser(token: string): IUser {
+  public static toUser(token: string): User {
     if (!token) {
       return null;
     }
@@ -22,8 +22,8 @@ export class TokenService {
         .map((c: string) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
         .join('')
     );
-    const { email, display, userId }: JwtPayload = JSON.parse(jsonPayload);
-    return { email, display, userId };
+    const { email, display, _id }: JwtPayload = JSON.parse(jsonPayload);
+    return { email, display, _id };
   }
 
   public set jwt(jwt: JwtResponse) {

@@ -1,11 +1,16 @@
 import { IToken } from './auth.interface';
 
 export interface IUser {
-  userId?: string;
   email?: string;
   display?: string;
   password?: string;
+  created?: Date;
+  updated?: Date;
   tokens?: IToken[];
+}
+
+export interface User extends IUser {
+  _id: string;
 }
 
 export interface CreateUserDto {

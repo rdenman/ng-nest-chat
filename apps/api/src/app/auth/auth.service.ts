@@ -1,7 +1,7 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { IUser, JwtPayload, JwtResponse, LoginUserDto } from '@ng-nest-chat/api-interfaces';
+import { JwtPayload, JwtResponse, LoginUserDto, User } from '@ng-nest-chat/api-interfaces';
 import { IUserModel } from '../user/user.schema';
 import { UserService } from '../user/user.service';
 
@@ -31,7 +31,7 @@ export class AuthService {
   }
 
   public async validateUserByToken(payload: JwtPayload, token: string): Promise<JwtResponse> {
-    const user: IUser = await this.userService.findOneByToken(payload.email, token);
+    const user: User = await this.userService.findOneByToken(payload.email, token);
     if (user) {
       return this.createJwtPayload(user);
     } else {
@@ -39,13 +39,12 @@ export class AuthService {
     }
   }
 
-  private createJwtPayload(user: IUser): JwtResponse {
+  private createJwtPayload(user: User): JwtResponse {
     const data: JwtPayload = {
       email: user.email,
       display: user.display,
-      userId: user.userId,
+      _id: user._id,
     };
-    console.log(data);
     const jwt: string = this.jwtService.sign(data);
     return {
       expiresIn: Number(this.configService.get<number>('JWT_EXPIRES_IN')),

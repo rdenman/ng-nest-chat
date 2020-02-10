@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { IUser } from '@ng-nest-chat/api-interfaces';
+import { User } from '@ng-nest-chat/api-interfaces';
 import { AuthService, UserService } from '../auth';
 
 @Component({
@@ -17,7 +17,7 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    this.userService.currentUser.subscribe((user: IUser) => {
+    this.userService.currentUser.subscribe((user: User) => {
       if (user) {
         this.userDisplay = user.display;
       }
