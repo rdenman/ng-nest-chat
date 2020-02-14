@@ -33,6 +33,9 @@ export class ChatHomeComponent implements OnInit, OnDestroy {
     this.chatService.userCount.pipe(takeUntil(this.ngUnsubscribe)).subscribe((count: number) => {
       this.connectedUsersCount = count;
     });
+    this.chatService.currentRoom.pipe(takeUntil(this.ngUnsubscribe)).subscribe((room: Room) => {
+      this.messages = room.messages;
+    });
   }
 
   public ngOnDestroy(): void {
@@ -43,14 +46,15 @@ export class ChatHomeComponent implements OnInit, OnDestroy {
 
   public addChat(message: string): void {
     // TODO update room
-    this.chatService.sendChat({ text: message.trim(), from: this.currentUser, room: this.currentRoom });
+    const text: string = message.trim();
+    if (text) {
+      this.chatService.sendChat({ text, from: this.currentUser, room: this.currentRoom });
+    }
   }
 
   public switchRooms(room: Room): void {
     this.chatService.leaveRoom(this.currentRoom);
     this.currentRoom = room;
-    console.log(this.currentRoom);
-    this.messages = this.currentRoom.messages || [];
     this.chatService.joinRoom(this.currentRoom);
   }
 }

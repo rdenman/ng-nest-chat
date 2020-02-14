@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule, MongooseModuleOptions } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
@@ -12,12 +12,15 @@ import { UserModule } from './user/user.module';
     }),
     MongooseModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: async (configService: ConfigService): Promise<MongooseModuleOptions> => ({
-        uri: configService.get<string>('MONGODB_URI'),
-        useCreateIndex: true,
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      }),
+      useFactory: async (configService: ConfigService): Promise<MongooseModuleOptions> => {
+        Logger.log(configService.get<string>('MONGODB_URI'), 'Mongoose Initialization');
+        return {
+          uri: configService.get<string>('MONGODB_URI'),
+          useCreateIndex: true,
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+        };
+      },
     }),
     AuthModule,
     ChatModule,

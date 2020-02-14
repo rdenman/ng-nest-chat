@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Room } from '@ng-nest-chat/api-interfaces';
 import { UserService } from '../../../core/auth';
 import { RoomService } from '../../services/room.service';
+import { ChatService } from '../../services';
 
 @Component({
   selector: 'app-chat-room-list',
@@ -18,6 +19,7 @@ export class ChatRoomListComponent implements OnInit {
   public message: string = '';
 
   constructor(
+    @Inject(ChatService) private readonly chatService: ChatService,
     @Inject(FormBuilder) private readonly formBuilder: FormBuilder,
     @Inject(RoomService) private readonly roomService: RoomService,
     @Inject(UserService) private readonly userService: UserService
@@ -29,18 +31,15 @@ export class ChatRoomListComponent implements OnInit {
     });
 
     this.roomService.findAll().subscribe((rooms: Room[]) => {
-      console.log(rooms);
       this.rooms = rooms;
     });
   }
 
   public onSubmit(): void {
-    console.log('submit...');
     if (this.form.invalid) {
       this.message = 'Invalid room name.';
       return;
     }
-    console.log('valid');
 
     this.loading = true;
     this.message = '';
@@ -51,8 +50,8 @@ export class ChatRoomListComponent implements OnInit {
         owner: this.userService.currentUserValue,
       })
       .subscribe((room: Room) => {
-        console.log(room);
         this.rooms.push(room);
+        this.form.controls.name.setValue('');
       });
   }
 

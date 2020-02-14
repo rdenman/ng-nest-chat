@@ -22,6 +22,7 @@ export class RoomController {
       _id: room._id,
       name: room.name,
       owner: room.owner,
+      // TODO shouldn't load all messages nor send them all back
       messages: room.messages,
     }));
   }

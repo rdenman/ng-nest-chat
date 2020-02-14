@@ -7,10 +7,12 @@ import { WebsocketService } from '../../core/services';
 export class ChatService {
   private _messages: Observable<Message>;
   private _userCount: Observable<number>;
+  private _currentRoom: Observable<Room>;
 
   constructor(@Inject(WebsocketService) private readonly websocketService: WebsocketService) {
     this._messages = this.websocketService.listenToEvent<Message>(EventType.Message);
     this._userCount = this.websocketService.listenToEvent<number>(EventType.UpdateCount);
+    this._currentRoom = this.websocketService.listenToEvent<Room>(EventType.JoinRoom);
   }
 
   public get messages(): Observable<Message> {
@@ -19,6 +21,10 @@ export class ChatService {
 
   public get userCount(): Observable<number> {
     return this._userCount;
+  }
+
+  public get currentRoom(): Observable<Room> {
+    return this._currentRoom;
   }
 
   public connect(): void {

@@ -1,16 +1,19 @@
-<div class="h-full flex">
+<div class="h-full flex p-4">
   <app-chat-room-list (selectRoom)="switchRooms($event)"></app-chat-room-list>
 
-  <div *ngIf="currentRoom" class="h-full flex flex-col">
-    <h2 class="text-xl font-bold">{{ currentRoom.name }}</h2>
-    <div>Connected Users: {{ connectedUsersCount }}</div>
+  <div class="h-full flex flex-col w-full">
+    <div class="font-bold self-end uppercase">Online Users: {{ connectedUsersCount }}</div>
 
-    <div class="flex-auto overflow-y-auto">
-      <app-chat-message-list [messages]="messages"></app-chat-message-list>
-    </div>
+    <div *ngIf="currentRoom" class="h-full flex flex-col w-full p-4 mt-2 shadow-xl border-2 border-red-200 rounded">
+      <h2 class="text-xl font-bold border-b-2 border-red-200 px-2">{{ currentRoom.name }}</h2>
 
-    <div class="flex-initial">
-      <app-chat-box (send)="addChat($event)"></app-chat-box>
+      <div class="flex-auto overflow-y-auto px-4 py-2">
+        <app-chat-message-list [messages]="messages"></app-chat-message-list>
+      </div>
+
+      <div class="flex-initial">
+        <app-chat-box (send)="addChat($event)"></app-chat-box>
+      </div>
     </div>
   </div>
 </div>
