@@ -2,21 +2,17 @@ version: '2'
 services:
   client:
     container_name: client
-    restart: always
     build:
       context: .
-      dockerfile: client.Dockerfile
+      dockerfile: ./apps/client/Dockerfile
     ports:
       - '4200:80'
-    links:
-      - app
 
   app:
     container_name: app
-    restart: always
     build:
       context: .
-      dockerfile: api.Dockerfile
+      dockerfile: ./apps/api/Dockerfile
     ports:
       - '3000:3000'
     links:

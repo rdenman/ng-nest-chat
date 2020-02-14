@@ -1,3 +1,5 @@
+# TODO build from here as well
+
 FROM node:alpine
 
 RUN apk add --no-cache --virtual .gyp \
